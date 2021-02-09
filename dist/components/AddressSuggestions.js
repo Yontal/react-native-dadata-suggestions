@@ -50,7 +50,11 @@ class AddressSuggestions extends react_1.default.PureComponent {
                 }),
             })
                 .then(response => response.json())
-                .then(response => this.setState({ suggestions: response.suggestions }))
+                .then(response => {
+                this.state.query && this.props.onFetch && this.props.onFetch(response.suggestions);
+                this.setState({ suggestions: response.suggestions });
+                return response;
+            })
                 .catch(error => console.log(error));
         };
         this.onSuggestionClick = (index, event) => {
