@@ -96,7 +96,6 @@ export interface AddressSuggestionsProps {
     query?: string;
     renderItem: any;
     token: string;
-    onFetch?: (suggestions: DadataSuggestion[]) => void;
 }
 interface AddressSuggestionsState {
     inputFocused: boolean;
@@ -127,7 +126,7 @@ export declare class AddressSuggestions extends React.PureComponent<AddressSugge
     onInputBlur: () => void;
     onInputChange: (value: string) => void;
     fetchSuggestions: () => void;
-    onSuggestionClick: (index: number, event: React.MouseEvent<HTMLDivElement>) => void;
+    onSuggestionClick: (index: number, event: React.MouseEvent<HTMLDivElement, MouseEvent>) => void;
     selectSuggestion: (index: number) => void;
     renderTextInput: () => JSX.Element;
     renderSuggestionItem: ({ item, index }: any) => JSX.Element;
