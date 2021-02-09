@@ -38,12 +38,14 @@ export class AddressSuggestions extends React.PureComponent {
                 body: JSON.stringify({
                     query: this.state.query,
                     count: this.props.count ? this.props.count : 5,
-                    locations: [{ kladr_id: '50' }, { kladr_id: '77' }],
-                    locations_boost: [{ kladr_id: '77' }]
                 })
             })
                 .then(response => response.json())
-                .then(response => this.setState({ suggestions: response.suggestions }))
+                .then(response => {
+                    this.state.query && this.props.onFetch && this.props.onFetch(response.suggestions);
+                    this.setState({suggestions: response.suggestions});
+                    return response;
+                  })
                 .catch(error => console.log(error));
         };
         this.onSuggestionClick = (index, event) => {
@@ -104,7 +106,6 @@ const androidStyles = {
         marginBottom: 0
     },
     list: {
-        backgroundColor: 'white',
         borderTopWidth: 0,
         margin: 10,
         marginTop: 0
@@ -113,12 +114,10 @@ const androidStyles = {
 const iosStyles = {
     inputContainer: {},
     input: {
-        backgroundColor: 'white',
         height: 40,
         paddingLeft: 3
     },
     list: {
-        backgroundColor: 'white',
         borderTopWidth: 0,
         left: 0,
         position: 'absolute',
@@ -134,7 +133,6 @@ const styles = StyleSheet.create(Object.assign({ container: {
         top: 0,
         zIndex: 1
     }, input: {
-        backgroundColor: 'white',
         height: 40,
         paddingLeft: 3
     } }, Platform.select({
