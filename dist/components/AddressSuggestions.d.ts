@@ -1,5 +1,5 @@
-import React from 'react';
-import { GestureResponderEvent, StyleProp, ViewStyle } from 'react-native';
+import * as React from 'react';
+import { StyleProp, ViewStyle } from 'react-native';
 export declare type DadataAddress = {
     area: string;
     area_fias_id: string;
@@ -106,6 +106,13 @@ interface AddressSuggestionsState {
     suggestionsVisible: boolean;
 }
 export declare class AddressSuggestions extends React.PureComponent<AddressSuggestionsProps, AddressSuggestionsState> {
+    static defaultProps: {
+        disabled: boolean;
+        ItemSeparatorComponent: null;
+        keyExtractor: (item: any, index: number) => string;
+        renderItem: ({ item }: any) => JSX.Element;
+        token: string;
+    };
     private resultListRef;
     private textInputRef;
     constructor(props: AddressSuggestionsProps);
@@ -120,11 +127,11 @@ export declare class AddressSuggestions extends React.PureComponent<AddressSugge
     onInputBlur: () => void;
     onInputChange: (value: string) => void;
     fetchSuggestions: () => void;
-    onSuggestionClick: (index: number, event: GestureResponderEvent) => void;
+    onSuggestionClick: (index: number, event: React.MouseEvent<HTMLDivElement>) => void;
     selectSuggestion: (index: number) => void;
     renderTextInput: () => JSX.Element;
     renderSuggestionItem: ({ item, index }: any) => JSX.Element;
-    renderSuggestions: () => JSX.Element;
+    renderSuggestions(): JSX.Element;
     render(): JSX.Element;
 }
 export {};

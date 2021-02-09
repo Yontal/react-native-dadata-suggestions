@@ -1,19 +1,15 @@
-import React from 'react';
+import * as React from 'react';
 import {
   FlatList,
-  GestureResponderEvent,
+  Platform,
   StyleProp,
+  StyleSheet,
   Text,
   TextInput,
   TouchableOpacity,
   View,
   ViewStyle,
 } from 'react-native';
-
-import { styles } from './styles';
-
-const defaultKeyExtractor = (item: any, index: number): number => index;
-const defaultItemRenderer = ({ item }: any) => <Text>{item}</Text>;
 
 export type DadataAddress = {
   area: string;
@@ -128,6 +124,14 @@ export class AddressSuggestions extends React.PureComponent<
   AddressSuggestionsProps,
   AddressSuggestionsState
 > {
+  static defaultProps = {
+    disabled: false,
+    ItemSeparatorComponent: null,
+    keyExtractor: (item: any, index: number): string => index.toString(),
+    renderItem: ({ item }: any) => <Text>{item}</Text>,
+    token: '',
+  };
+
   private resultListRef: any;
   private textInputRef: any;
 
@@ -139,64 +143,61 @@ export class AddressSuggestions extends React.PureComponent<
   }
 
   state = {
-    query: this.props.query ?? '',
+    query: this.props.query ? this.props.query : '',
     inputFocused: false,
     suggestions: [],
     suggestionsVisible: true,
     isValid: false,
   };
 
-  onInputFocus = (): void => {
+  onInputFocus = () => {
     this.setState({ inputFocused: true });
-    if (this.state.suggestions.length === 0) {
+    if (this.state.suggestions.length == 0) {
       this.fetchSuggestions();
     }
   };
 
-  onInputBlur = (): void => {
+  onInputBlur = () => {
     this.setState({ inputFocused: false });
-    if (this.state.suggestions.length === 0) {
+    if (this.state.suggestions.length == 0) {
       this.fetchSuggestions();
     }
   };
 
-  onInputChange = (value: string): void => {
+  onInputChange = (value: string) => {
     this.setState({ query: value, suggestionsVisible: true }, () => {
       this.fetchSuggestions();
     });
   };
 
-  fetchSuggestions = (): void => {
-    const { count = 5, token = '' } = this.props;
-    const { query } = this.state;
-
+  fetchSuggestions = () => {
     fetch('https://suggestions.dadata.ru/suggestions/api/4_1/rs/suggest/address', {
       method: 'POST',
       headers: {
         Accept: 'application/json',
-        Authorization: `Token ${token}`,
+        Authorization: `Token ${this.props.token}`,
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        count,
-        query,
+        query: this.state.query,
+        count: this.props.count ? this.props.count : 5,
       }),
     })
-      .then(response => response.json())
-      .then(response => {
+      .then((response) => response.json())
+      .then((response) => {
         this.state.query && this.props.onFetch && this.props.onFetch(response.suggestions);
-        this.setState({suggestions: response.suggestions});
+        this.setState({ suggestions: response.suggestions });
         return response;
       })
-      .catch(error => console.log(error));
+      .catch((error) => console.log(error));
   };
 
-  onSuggestionClick = (index: number, event: GestureResponderEvent): void => {
+  onSuggestionClick = (index: number, event: React.MouseEvent<HTMLDivElement>) => {
     event.stopPropagation();
     this.selectSuggestion(index);
   };
 
-  selectSuggestion = (index: number): void => {
+  selectSuggestion = (index: number) => {
     const { onSelect } = this.props;
     const { query, suggestions } = this.state;
 
@@ -213,36 +214,36 @@ export class AddressSuggestions extends React.PureComponent<
     }
   };
 
-  renderTextInput = (): JSX.Element => {
-    const { disabled = false, inputStyle, placeholder = '' } = this.props;
+  renderTextInput = () => {
+    const { inputStyle } = this.props;
 
     return (
       <TextInput
         autoCapitalize="none"
         autoCorrect={false}
-        editable={!disabled}
+        editable={!this.props.disabled}
         onChangeText={this.onInputChange}
         onFocus={this.onInputFocus}
         onBlur={this.onInputBlur}
-        placeholder={placeholder}
-        ref={ref => (this.textInputRef = ref)}
+        placeholder={this.props.placeholder ? this.props.placeholder : ''}
+        ref={(ref) => (this.textInputRef = ref)}
         style={[styles.input, inputStyle]}
         value={this.state.query}
       />
     );
   };
 
-  renderSuggestionItem = ({ item, index }: any): JSX.Element => {
-    const { renderItem: SuggestionItem = defaultItemRenderer } = this.props;
+  renderSuggestionItem = ({ item, index }: any) => {
+    const { renderItem: SuggestionItem } = this.props;
     return (
-      <TouchableOpacity onPress={(e: GestureResponderEvent) => this.onSuggestionClick(index, e)}>
+      <TouchableOpacity onPress={(e: any) => this.onSuggestionClick(index, e)}>
         <SuggestionItem item={item} />
       </TouchableOpacity>
     );
   };
 
-  renderSuggestions = (): JSX.Element => {
-    const { ItemSeparatorComponent = null, keyExtractor, listStyle } = this.props;
+  renderSuggestions() {
+    const { ItemSeparatorComponent, keyExtractor, listStyle } = this.props;
     const { suggestions } = this.state;
 
     return (
@@ -250,14 +251,14 @@ export class AddressSuggestions extends React.PureComponent<
         ref={this.resultListRef}
         data={suggestions}
         renderItem={this.renderSuggestionItem}
-        keyExtractor={keyExtractor ?? defaultKeyExtractor}
+        keyExtractor={keyExtractor}
         ItemSeparatorComponent={ItemSeparatorComponent}
         style={[styles.list, listStyle]}
       />
     );
-  };
+  }
 
-  render(): JSX.Element {
+  render() {
     const { containerStyle, inputContainerStyle, listContainerStyle } = this.props;
     const { suggestions, suggestionsVisible } = this.state;
 
@@ -271,3 +272,48 @@ export class AddressSuggestions extends React.PureComponent<
     );
   }
 }
+
+const androidStyles = {
+  inputContainer: {
+    marginBottom: 0,
+  },
+  list: {
+    borderTopWidth: 0,
+    margin: 10,
+    marginTop: 0,
+  },
+};
+
+const iosStyles = {
+  inputContainer: {},
+  input: {
+    height: 40,
+    paddingLeft: 3,
+  },
+  list: {
+    borderTopWidth: 0,
+    left: 0,
+    position: 'absolute' as const,
+    right: 0,
+  },
+};
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    width: '100%',
+    left: 0,
+    position: 'absolute',
+    right: 0,
+    top: 0,
+    zIndex: 1,
+  },
+  input: {
+    height: 40,
+    paddingLeft: 3,
+  },
+  ...Platform.select({
+    android: { ...androidStyles },
+    ios: { ...iosStyles },
+  }),
+});
