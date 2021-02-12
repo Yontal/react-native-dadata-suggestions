@@ -9,6 +9,7 @@ import {
   TouchableOpacity,
   View,
   ViewStyle,
+  Pressable,
 } from 'react-native';
 
 export type DadataAddress = {
@@ -110,6 +111,8 @@ export interface AddressSuggestionsProps {
   renderItem: any;
   token: string;
   onFetch?: (suggestions: DadataSuggestion[]) => void;
+  onTextInputContainerPress?: any;
+  stylePressable?: any;
 }
 
 interface AddressSuggestionsState {
@@ -218,18 +221,21 @@ export class AddressSuggestions extends React.PureComponent<
     const { inputStyle } = this.props;
 
     return (
-      <TextInput
-        autoCapitalize="none"
-        autoCorrect={false}
-        editable={!this.props.disabled}
-        onChangeText={this.onInputChange}
-        onFocus={this.onInputFocus}
-        onBlur={this.onInputBlur}
-        placeholder={this.props.placeholder ? this.props.placeholder : ''}
-        ref={(ref) => (this.textInputRef = ref)}
-        style={[styles.input, inputStyle]}
-        value={this.state.query}
-      />
+      <Pressable onPress={this.props.onTextInputContainerPress}>
+        <Text style={this.props.stylePressable}>{this.props.placeholder}</Text>
+        <TextInput
+          autoCapitalize="none"
+          autoCorrect={false}
+          editable={!this.props.disabled}
+          onChangeText={this.onInputChange}
+          onFocus={this.onInputFocus}
+          onBlur={this.onInputBlur}
+          // placeholder={this.props.placeholder ? this.props.placeholder : ''}
+          ref={(ref) => (this.textInputRef = ref)}
+          style={[styles.input, inputStyle]}
+          value={this.state.query}
+        />
+      </Pressable>
     );
   };
 
