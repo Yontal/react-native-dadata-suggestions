@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { FlatList, Platform, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
+import { FlatList, Platform, StyleSheet, Text, TextInput, TouchableOpacity, View, Pressable } from 'react-native';
 export class AddressSuggestions extends React.PureComponent {
     constructor(props) {
         super(props);
@@ -69,7 +69,12 @@ export class AddressSuggestions extends React.PureComponent {
         };
         this.renderTextInput = () => {
             const { inputStyle } = this.props;
-            return (<TextInput autoCapitalize="none" autoCorrect={false} editable={!this.props.disabled} onChangeText={this.onInputChange} onFocus={this.onInputFocus} onBlur={this.onInputBlur} placeholder={this.props.placeholder ? this.props.placeholder : ''} ref={ref => (this.textInputRef = ref)} style={[styles.input, inputStyle]} value={this.state.query}/>);
+            return (
+                <Pressable>
+                <Text style={this.state.inputFocused || Boolean(this.state.query) ? styles.placeholderFocused : styles.placeholderUnfocused}>{this.props.placeholder}</Text>
+            <TextInput autoCapitalize="none" autoCorrect={false} editable={!this.props.disabled} onChangeText={this.onInputChange} onFocus={this.onInputFocus} onBlur={this.onInputBlur} ref={ref => (this.textInputRef = ref)} style={[styles.input, inputStyle]} value={this.state.query}/>
+            </Pressable>
+            );
         };
         this.renderSuggestionItem = ({ item, index }) => {
             const { renderItem: SuggestionItem } = this.props;
@@ -135,7 +140,21 @@ const styles = StyleSheet.create(Object.assign({ container: {
     }, input: {
         height: 40,
         paddingLeft: 3
-    } }, Platform.select({
+    } , inputplaceholderUnfocused: {
+        color: '#8f9399',
+        fontSize: 15,
+        position: 'absolute',
+        // left: 5,
+        top: 20,
+      },
+      placeholderFocused: {
+        color: '#8f9399',
+        fontSize: 12,
+        position: 'absolute',
+        // left: 16,
+        top: 8,
+      },}, 
+Platform.select({
     android: Object.assign({}, androidStyles),
     ios: Object.assign({}, iosStyles)
 })));
