@@ -140,7 +140,8 @@ const styles = StyleSheet.create(Object.assign({ container: {
     }, input: {
         height: 40,
         paddingLeft: 3
-    } , inputplaceholderUnfocused: {
+    } , 
+    placeholderUnfocused: {
         color: '#8f9399',
         fontSize: 15,
         position: 'absolute',
