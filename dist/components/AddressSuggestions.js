@@ -71,7 +71,7 @@ export class AddressSuggestions extends React.PureComponent {
             const { inputStyle } = this.props;
             return (
                 <Pressable>
-                <Text style={this.state.inputFocused || Boolean(this.state.query) ? styles.placeholderFocused : styles.placeholderUnfocused}>{this.props.placeholder}</Text>
+                <Text style={this.state.inputFocused || Boolean(this.state.query) ? this.props.placeholderFocused : this.props.placeholderUnfocused}>{this.props.placeholder}</Text>
             <TextInput autoCapitalize="none" autoCorrect={false} editable={!this.props.disabled} onChangeText={this.onInputChange} onFocus={this.onInputFocus} onBlur={this.onInputBlur} ref={ref => (this.textInputRef = ref)} style={[styles.input, inputStyle]} value={this.state.query}/>
             </Pressable>
             );
@@ -146,13 +146,13 @@ const styles = StyleSheet.create(Object.assign({ container: {
         fontSize: 15,
         position: 'absolute',
         // left: 5,
-        top: 20,
+        top: 16,
       },
       placeholderFocused: {
         color: '#8f9399',
         fontSize: 12,
         position: 'absolute',
-        // left: 16,
+        left: 2,
         top: 8,
       },}, 
 Platform.select({

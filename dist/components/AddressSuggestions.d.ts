@@ -99,6 +99,8 @@ export interface AddressSuggestionsProps {
   onFetch?: (suggestions: DadataSuggestion[]) => void;
   onTextInputContainerPress?: any;
   stylePressable?: any;
+  placeholderFocused?: any;
+  placeholderUnfocused?: any;
 }
 interface AddressSuggestionsState {
   inputFocused: boolean;
