@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { Keyboard } from 'react-native';
 import { FlatList, Platform, StyleSheet, Text, TextInput, TouchableOpacity, View, Pressable } from 'react-native';
 export class AddressSuggestions extends React.PureComponent {
     constructor(props) {
@@ -88,7 +89,7 @@ export class AddressSuggestions extends React.PureComponent {
     renderSuggestions() {
         const { ItemSeparatorComponent, keyExtractor, listStyle } = this.props;
         const { suggestions } = this.state;
-        return (<FlatList ref={this.resultListRef} data={suggestions} renderItem={this.renderSuggestionItem} keyExtractor={keyExtractor} ItemSeparatorComponent={ItemSeparatorComponent} style={[styles.list, listStyle]}/>);
+        return (<FlatList onPress={Keyboard.dismiss()} ref={this.resultListRef} data={suggestions} renderItem={this.renderSuggestionItem} keyExtractor={keyExtractor} ItemSeparatorComponent={ItemSeparatorComponent} style={[styles.list, listStyle]}/>);
     }
     render() {
         const { containerStyle, inputContainerStyle, listContainerStyle } = this.props;
