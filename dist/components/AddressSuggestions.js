@@ -60,6 +60,7 @@ export class AddressSuggestions extends React.PureComponent {
                 const currentSuggestion = suggestions[index];
                 if (suggestions.length === 1 || currentSuggestion.value === query) {
                     this.setState({ suggestionsVisible: false });
+                    this.setState({ query: currentSuggestion.value }, () => this.fetchSuggestions());
                     onSelect && onSelect(suggestions[index]);
                 }
                 else {
