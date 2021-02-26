@@ -89,7 +89,7 @@ export class AddressSuggestions extends React.PureComponent {
     renderSuggestions() {
         const { ItemSeparatorComponent, keyExtractor, listStyle } = this.props;
         const { suggestions } = this.state;
-        return (<FlatList onPress={Keyboard.dismiss()} ref={this.resultListRef} data={suggestions} renderItem={this.renderSuggestionItem} keyExtractor={keyExtractor} ItemSeparatorComponent={ItemSeparatorComponent} style={[styles.list, listStyle]}/>);
+        return (<FlatList keyboardShouldPersistTaps='handler' ref={this.resultListRef} data={suggestions} renderItem={this.renderSuggestionItem} keyExtractor={keyExtractor} ItemSeparatorComponent={ItemSeparatorComponent} style={[styles.list, listStyle]}/>);
     }
     render() {
         const { containerStyle, inputContainerStyle, listContainerStyle } = this.props;
