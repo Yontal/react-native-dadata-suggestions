@@ -96,7 +96,7 @@ export class AddressSuggestions extends React.PureComponent {
         const { containerStyle, inputContainerStyle, listContainerStyle } = this.props;
         const { suggestions, suggestionsVisible } = this.state;
         return (<View style={[styles.container, containerStyle]}>
-        <View style={[styles.inputContainer, inputContainerStyle]}>{this.renderTextInput()}</View>
+        <View style={[styles.inputContainer, inputContainerStyle, this.props.isError ? {borderColor: '#ff455c'} : this.state.inputFocused ? {borderColor: '#1f2229'} : {borderColor: '#e8e8ed'}]}>{this.renderTextInput()}</View>
         {suggestionsVisible && suggestions && suggestions.length > 0 && (<View style={listContainerStyle}>{this.renderSuggestions()}</View>)}
       </View>);
     }

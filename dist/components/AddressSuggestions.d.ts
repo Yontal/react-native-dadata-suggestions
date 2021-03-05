@@ -101,6 +101,7 @@ export interface AddressSuggestionsProps {
   stylePressable?: any;
   placeholderFocused?: any;
   placeholderUnfocused?: any;
+  isError?: boolean;
 }
 interface AddressSuggestionsState {
   inputFocused: boolean;
