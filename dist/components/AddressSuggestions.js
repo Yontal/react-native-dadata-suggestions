@@ -1,5 +1,4 @@
 import * as React from 'react';
-import { Keyboard } from 'react-native';
 import { FlatList, Platform, StyleSheet, Text, TextInput, TouchableOpacity, View, Pressable } from 'react-native';
 export class AddressSuggestions extends React.PureComponent {
     constructor(props) {
@@ -90,13 +89,13 @@ export class AddressSuggestions extends React.PureComponent {
     renderSuggestions() {
         const { ItemSeparatorComponent, keyExtractor, listStyle } = this.props;
         const { suggestions } = this.state;
-        return (<FlatList keyboardShouldPersistTaps='handler' ref={this.resultListRef} data={suggestions} renderItem={this.renderSuggestionItem} keyExtractor={keyExtractor} ItemSeparatorComponent={ItemSeparatorComponent} style={[styles.list, listStyle]}/>);
+        return (<FlatList keyboardShouldPersistTaps="handled" ref={this.resultListRef} data={suggestions} renderItem={this.renderSuggestionItem} keyExtractor={keyExtractor} ItemSeparatorComponent={ItemSeparatorComponent} style={[styles.list, listStyle]}/>);
     }
     render() {
         const { containerStyle, inputContainerStyle, listContainerStyle } = this.props;
         const { suggestions, suggestionsVisible } = this.state;
         return (<View style={[styles.container, containerStyle]}>
-        <View style={[styles.inputContainer, inputContainerStyle, this.props.isError ? {borderColor: '#ff455c'} : this.state.inputFocused ? {borderColor: '#1f2229'} : {borderColor: '#e8e8ed'}]}>{this.renderTextInput()}</View>
+        <View style={[styles.inputContainer, inputContainerStyle]}>{this.renderTextInput()}</View>
         {suggestionsVisible && suggestions && suggestions.length > 0 && (<View style={listContainerStyle}>{this.renderSuggestions()}</View>)}
       </View>);
     }
